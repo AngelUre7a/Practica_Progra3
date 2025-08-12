@@ -2,9 +2,9 @@ import sqlite3
 from flask import Flask, jsonify, g
 import os
 
-DATABASE = os.path.join(os.path.dirname(os.path.dirname(__file__)), '..', 'db', 'data', 'clientes_compras.db')
+DATABASE = os.path.join(os.path.dirname(os.path.dirname(__file__)), '..', 'data', 'mydb.sqlite')
 SCHEMA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), '..', 'schema.sql')
-DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), '..', 'db', 'data', 'data.sql')
+DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), '..', 'db', 'init.sql')
 
 
 def get_db():
@@ -45,6 +45,13 @@ def create_app():
         db = get_db()
         clientes = db.execute('SELECT id, nombre, email FROM clientes').fetchall()
         return jsonify([dict(row) for row in clientes])
+    
+    @app.route('/clientes/<int:id_cliente>/compras', methods=['GET'])
+    def get_compras_cliente(id_cliente):
+        db = get_db()
+        compras = db.execute('SELECT id, producto, cantidad FROM compras WHERE cliente_id = ?', (id_cliente,)
+        ).fetchall()
+        return jsonify([dict(row) for row in compras])
 
     @app.cli.command('init-db')
     def init_db_command():
