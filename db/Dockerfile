@@ -13,5 +13,3 @@ RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 CMD ["tail", "-f", "/dev/null"]
-
-#jdbc:sqlite:C:/Users/Saul/Documents/Github/Practica_Progra3/db/data/mydb.sqlite
